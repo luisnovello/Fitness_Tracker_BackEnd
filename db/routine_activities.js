@@ -1,11 +1,10 @@
-const express = require("express");
 const client = require("./client");
-const bcrypt = require("bcrypt");
-const routineActivitiesRouter = express.Router();
 
 async function getRoutineActivityById(id) {
   try {
-    const routineActivity = await client.query(
+    const {
+      rows: [routineActivity],
+    } = await client.query(
       `
       SELECT *
       FROM routine_activities
@@ -45,20 +44,8 @@ async function addActivityToRoutine({
 
 async function updateRoutineActivity({ id, count, duration }) {
   try {
-    const activity = await client.query(
-      `
-      SELECT *
-      FROM routine_activities
-      WHERE id=$1;
-    `,
-      [id]
-    );
-
-    const countField = count || activity.count;
-    const durationField = duration || activity.duration;
-
     const {
-      rows: [updatedActivity],
+      rows: [activity],
     } = await client.query(
       `
       UPDATE routine_activities
@@ -66,12 +53,10 @@ async function updateRoutineActivity({ id, count, duration }) {
       WHERE id=$1
       RETURNING *;
     `,
-      [id, countField, durationField]
+      [id, count, duration]
     );
 
-    console.log("UPDATED ACTIVITY", updatedActivity);
-
-    return updatedActivity;
+    return activity;
   } catch (err) {
     throw err;
   }
@@ -79,17 +64,21 @@ async function updateRoutineActivity({ id, count, duration }) {
 
 async function destroyRoutineActivity(id) {
   try {
-    await client.query(
+    const {
+      rows: [activity],
+    } = await client.query(
       `
-      DELETE FROM routine_activities
-      WHERE id=$1;
+    DELETE
+    FROM routine_activities
+    WHERE id=$1
+    RETURNING *;
     `,
       [id]
     );
 
-    return `"Routine ${routineActivity.name} Deleted"`;
-  } catch (err) {
-    throw err;
+    return activity;
+  } catch (error) {
+    throw error;
   }
 }
 

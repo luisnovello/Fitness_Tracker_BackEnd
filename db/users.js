@@ -37,7 +37,7 @@ async function getUser({ username, password }) {
       return;
     }
 
-    delete user.password;
+    // delete user.password;
 
     return user;
   } catch (err) {

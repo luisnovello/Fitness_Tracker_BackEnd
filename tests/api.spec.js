@@ -152,7 +152,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("Activities", () => {
+  describe("Activities", () => {
     let activityToCreateAndUpdate = {
       name: "Bicep Curls",
       description: "They hurt, but you will thank you later",
@@ -218,7 +218,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("Routines", () => {
+  describe("Routines", () => {
     let routineToCreateAndUpdate = {
       isPublic: true,
       name: "Elliptical Day",
@@ -332,7 +332,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routine_activities", () => {
+  describe("routine_activities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
